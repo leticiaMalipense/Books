@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:books/helpers/books_helper.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class BookPage extends StatefulWidget {
   final Book book;
@@ -71,6 +72,14 @@ class _BookPageState extends State<BookPage> {
                     image: DecorationImage(image: _edited.img != null ? FileImage(File(_edited.img)) : AssetImage("images/camera.png"))
                 ),
               ),
+              onTap: (){
+                ImagePicker.pickImage(source: ImageSource.camera).then((file) => (){
+                  if(file == null) return;
+                  setState(() {
+                    _edited.img = file.path;
+                  });
+                });
+              },
             ),
             TextField(
               controller: _titleController,

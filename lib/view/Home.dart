@@ -88,10 +88,52 @@ class _HomeState extends State<Home> {
         ),
       ),
       onTap: (){
-        _showBookPage(book: books[index]);
+        _showOptions(context, index);
       },
     );
   }
+  
+  void _showOptions(BuildContext context, int index)  {
+    showModalBottomSheet(context: context, builder: (context){
+      return BottomSheet(
+        onClosing: (){},
+        builder: (context){
+          return Container(
+            padding: EdgeInsets.all(10.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.all(10.0),
+                  child: FlatButton(
+                    child: Text("Editar", style: TextStyle(fontSize: 16.0)),
+                    onPressed: (){
+                      Navigator.pop(context);
+                      _showBookPage(book: books[index]);
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.all(10.0),
+                  child: FlatButton(
+                    child: Text("Excluir", style: TextStyle(fontSize: 16.0)),
+                    onPressed: (){
+                      helper.deleteBook(books[index].id);
+                      setState(() {
+                        books.removeAt(index);
+                        Navigator.pop(context);
+                      });
+                    },
+                  ),
+                )
+              ],
+            ),
+          );
+        },
+      );
+    });
+  }
+  
   void _showBookPage({Book book}) async {
     final responseBook = await Navigator.push(context,
         MaterialPageRoute(builder: (context) => BookPage(book: book,))
